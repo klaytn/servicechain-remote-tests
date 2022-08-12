@@ -2,7 +2,7 @@
 .idea
 
 # bridge-info output files
-test/common/bridge-info*.json
+**/bridge-info*.json
 
 # value transfer outputs
 test/**/transfer-config*.json
