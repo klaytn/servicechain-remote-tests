@@ -5,7 +5,7 @@
 **/bridge-info*.json
 
 # value transfer outputs
-test/**/transfer-config*.json
+**/transfer-config*.json
 
 # node
 **/node_modules
