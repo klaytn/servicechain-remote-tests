@@ -1,0 +1,28 @@
+{
+  "config": {
+    "chainId": 1004,
+    "istanbul": {
+      "epoch": 604800,
+      "policy": 0,
+      "sub": 21
+    },
+    "unitPrice": 25000000000,
+    "deriveShaImpl": 0,
+    "governance": {
+      "governingNode": "0x7c24f4decc7a59f915d370faf89c63519e99bfcf",
+      "governanceMode": "none"
+    }
+  },
+  "timestamp": "0x6274b3e6",
+  "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000f85ad5947c24f4decc7a59f915d370faf89c63519e99bfcfb8410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0",
+  "governanceData": null,
+  "blockScore": "0x1",
+  "alloc": {
+    "7c24f4decc7a59f915d370faf89c63519e99bfcf": {
+      "balance": "0x446c3b15f9926687d2c40534fdb564000000000000"
+    }
+  },
+  "number": "0x0",
+  "gasUsed": "0x0",
+  "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000"
+}
