@@ -1,0 +1,70 @@
+name: "test01-newParent-newChild"
+on:
+  workflow_dispatch:
+    inputs:
+      envFile:
+        description: 'Env file name'
+        required: true
+        default: 'env/.env-new-new'
+        
+env:
+  DOCKER_COMPOSE_ENV_FILE: ${{ inputs.envFile }}
+  
+jobs:
+  value-transfer-tests:
+    timeout-minutes: 360
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: Start containers
+        run: |
+          cd servicechain-docker
+          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE up -d
+          
+      - name: Sleep 50 seconds because scn node needs to warm up during about 30 seconds
+        run: sleep 50
+        
+      - name: Check parent operator address by logs
+        run: |
+          cd servicechain-docker
+          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T EN-0 cat /klaytn/log/init.log
+          
+      - name: Check child operator address by logs
+        run: |
+          cd servicechain-docker
+          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T SCN-0 cat /klaytn/log/init.log
+          
+      - name: Make bridge-info.json
+        run: |
+          cd servicechain-docker
+          bash bridge-info/default-bridge-info.sh
+  
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 12
+      - run: cp servicechain-docker/bridge-info/bridge-info.json tests/value-transfer/config
+      - run: cd tests/value-transfer && npm i
+      - run: ls -al
+      
+      - name: Test the ERC20 value transfer
+        run: cd tests/value-transfer/ERC20 && bash run_testcase.sh
+        
+      - name: Stop containers
+        if: always()
+        run: |
+          cd servicechain-docker
+          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE down
+          
+      - name: Notify slack fail
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_NOTIFICATIONS_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: remote-tests-bot
+          status: FAILED
+          color: danger

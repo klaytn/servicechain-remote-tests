@@ -1,4 +1,5 @@
-# servicechain-remote-tests
+# Servicechain Remote Tests
+- It is for remote testing using caver-js. This is useful when certain tests do not work on the ServiceChain simulator node.
 
 ## Use docker-compose for setting parent and child docker image
 ### Parameters in env file
