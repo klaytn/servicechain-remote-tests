@@ -112,7 +112,7 @@ async function deploy(url, sender, info, bridgeAbi, bridgeCode, tokenAbi, tokenC
         value: 0
     });
 
-    const filename = process.env.transferConfig
+    const filename = process.env.transferConfig || 'transfer-config.json';
     fs.writeFile(filename, JSON.stringify(conf), (err) => {
         if (err) {
             console.log("Error:", err);
@@ -145,10 +145,14 @@ async function jsonRpcReq(url, log, method, params) {
     if (typeof jsonRpcReq.id == 'undefined') jsonRpcReq.id = 0;
 
     console.log(log)
-    await axios.post(url, {
+    const response = await axios.post(url, {
         "jsonrpc": "2.0", "method": method, "params": params, "id": jsonRpcReq.id++
     }).catch(err => {
         console.log(err)
         process.exit(1);
     })
+    if( response && response.data && response.data.error && response.data.error.code) {
+        console.error(method, "error is ", response.data);
+       process.exit(1);
+    }
 }

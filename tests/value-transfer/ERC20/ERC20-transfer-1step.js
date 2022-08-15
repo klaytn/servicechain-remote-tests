@@ -1,7 +1,7 @@
 const Caver = require('caver-js');
 const fs = require('fs');
 
-const conf = JSON.parse(fs.readFileSync(process.env.transferConfig, 'utf8'));
+const conf = JSON.parse(fs.readFileSync(process.env.transferConfig || 'transfer-config.json', 'utf8'));
 
 const childBuildPath = process.env.childBuildPath || '../build'
 const parentBuildPath = process.env.parentBuildPath || '../build'
@@ -27,17 +27,22 @@ async function parentTokenTransfer() {
   
   try {
     let balance = await scnInstance.methods.balanceOf(bob).call();
-    console.log("bob balance:", balance);
+    console.log("bob balance (before) :", balance);
 
     // Transfer main chain to service chain
-    console.log("requestValueTransfer..")
-    await enInstance.methods.requestValueTransfer(100, bob, 0, []).send({from:conf.sender.parent.address, gas: 1000000});
-    // Wait event to be trasnferred to child chain and contained into new block
+    const amount = 100
+    const receipt = await enInstance.methods.requestValueTransfer(amount, bob, 0, []).send({from:conf.sender.parent.address, gas: 1000000});
+    // Wait event to be transferred to child chain and contained into new block
     await sleep(6000);
 
     // Check bob balance in Service Chain
-    balance = await scnInstance.methods.balanceOf(bob).call();
-    console.log("bob balance:", balance);
+    const afterBalance = await scnInstance.methods.balanceOf(bob).call();
+    console.log("bob balance (after) :", afterBalance);
+    if( (parseInt(balance) + amount) != parseInt(afterBalance)) {
+      console.log("Receipt is ", JSON.stringify(receipt, null, 2));
+      console.error("Error: send amount ", amount, " is not applied. before = ", balance, " after = ", afterBalance);
+      process.exit(1);
+    }
   } catch (e) {
     console.log("Error:", e);
     process.exit(1);
@@ -59,18 +64,23 @@ async function childTokenTransfer() {
   const alice = "0xc40b6909eb7085590e1c26cb3becc25368e249e9";
 
   try {
-    let balance = await enInstance.methods.balanceOf(alice).call();
-    console.log("alice balance:", balance);
+    const balance = await enInstance.methods.balanceOf(alice).call();
+    console.log("alice balance (before) :", balance);
 
     // Transfer main chain to service chain
-    console.log("requestValueTransfer..")
-    await scnInstance.methods.requestValueTransfer(100, alice, 0, []).send({from:conf.sender.child.address, gas: 1000000});
+    const amount = 100
+    const receipt = await scnInstance.methods.requestValueTransfer(amount, alice, 0, []).send({from:conf.sender.child.address, gas: 1000000});
     // Wait event to be transferred to child chain and contained into new block
     await sleep(6000);
 
     // Check alice balance in Service Chain
-    balance = await enInstance.methods.balanceOf(alice).call();
-    console.log("alice balance:", balance);
+    const afterBalance = await enInstance.methods.balanceOf(alice).call();
+    console.log("alice balance (after) :", afterBalance);
+    if( (parseInt(balance) + amount) != parseInt(afterBalance)) {
+      console.log("Receipt is ", JSON.stringify(receipt, null, 2));
+      console.error("Error: send amount ", amount, " is not applied. before = ", balance, " after = ", afterBalance);
+      process.exit(1);
+    }
   } catch (e) {
     console.log("Error:", e);
     process.exit(1);
