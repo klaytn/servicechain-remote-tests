@@ -1,5 +1,8 @@
-# Servicechain Remote Tests
-- It is for remote testing using caver-js. This is useful when certain tests do not work on the ServiceChain simulator node.
+# ServiceChain Remote Tests
+- This is useful when certain tests do not work on the ServiceChain simulator node.
+- CN, PN, EN, SCN nodes are started in docker.
+- This is scheduling with github actions.
+- These tests use the caver-js.
 
 ## Use docker-compose for setting parent and child docker image
 ### Parameters in env file
