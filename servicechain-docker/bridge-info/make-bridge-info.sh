@@ -33,7 +33,3 @@ else
   >&2 echo "Not found child operator [$childOperator] or parent operator [$parentOperator]"
   exit 1
 fi
-
-
-
-

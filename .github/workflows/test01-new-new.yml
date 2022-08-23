@@ -42,13 +42,12 @@ jobs:
           cd servicechain-docker
           bash bridge-info/default-bridge-info.sh
   
-      - name: Setup Node.js
+      - name: Setup node.js and install required packages
         uses: actions/setup-node@v3
         with:
           node-version: 12
       - run: cp servicechain-docker/bridge-info/bridge-info.json tests/value-transfer/config
       - run: cd tests/value-transfer && npm i
-      - run: ls -al
       
       - name: Test the ERC20 value transfer
         run: cd tests/value-transfer/ERC20 && bash run_testcase.sh
