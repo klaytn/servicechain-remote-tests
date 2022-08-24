@@ -52,13 +52,13 @@ jobs:
       - name: Test the ERC20 value transfer
         run: cd tests/value-transfer/ERC20 && bash run_testcase.sh
         
-      - name: Logging the kend.out of EN node
+      - name: Logging the kend.out of EN node when job was failed
         if: failure()
         run: |
           cd servicechain-docker
           docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T EN-0 cat /klaytn/log/kend.out
 
-      - name: Logging the kscnd.out of SCN node
+      - name: Logging the kscnd.out of SCN node when job was failed
         if: failure()
         run: |
           cd servicechain-docker
