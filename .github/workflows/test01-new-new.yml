@@ -6,10 +6,10 @@ on:
         description: 'Env file name'
         required: true
         default: 'env/.env-new-new'
-        
+
 env:
   DOCKER_COMPOSE_ENV_FILE: ${{ inputs.envFile }}
-  
+
 jobs:
   value-transfer-tests:
     timeout-minutes: 360
@@ -18,30 +18,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
+      
       - name: Start containers
         run: |
           cd servicechain-docker
           docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE up -d
-          
+      
       - name: Sleep 50 seconds because scn node needs to warm up during about 30 seconds
         run: sleep 50
-        
+      
       - name: Check parent operator address by logs
         run: |
           cd servicechain-docker
           docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T EN-0 cat /klaytn/log/init.log
-          
+      
       - name: Check child operator address by logs
         run: |
           cd servicechain-docker
           docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T SCN-0 cat /klaytn/log/init.log
-          
+      
       - name: Make bridge-info.json
         run: |
           cd servicechain-docker
           bash bridge-info/default-bridge-info.sh
-  
+      
       - name: Setup node.js and install required packages
         uses: actions/setup-node@v3
         with:
@@ -51,37 +51,30 @@ jobs:
       
       - name: Test the ERC20 value transfer
         run: cd tests/value-transfer/ERC20 && bash run_testcase.sh
-        
-      - name: Logging the kend.out of EN node when job was failed
+      
+      - name: Copy log files in the failed-logs directory in case of failure
         if: failure()
         run: |
-          cd servicechain-docker
-          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T EN-0 cat /klaytn/log/kend.out
-
-      - name: Logging the kscnd.out of SCN node when job was failed
+          mkdir failed-logs
+          docker logs CN-0 >& failed-logs/kcnd.out
+          docker logs PN-0 >& failed-logs/kpnd.out
+          docker logs EN-0 >& failed-logs/kend.out
+          docker logs SCN-0 >& failed-logs/kscnd.out
+      
+      - name: Upload log files in case of failure
         if: failure()
-        run: |
-          cd servicechain-docker
-          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T SCN-0 cat /klaytn/log/kscnd.out
-
-      - name: Logging the kcnd.out of CN node when job was failed
-        if: failure()
-        run: |
-          cd servicechain-docker
-          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T CN-0 cat /klaytn/log/kcnd.out
-
-      - name: Logging the kpnd.out of PN node when job was failed
-        if: failure()
-        run: |
-          cd servicechain-docker
-          docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE exec -T PN-0 cat /klaytn/log/kpnd.out
-
+        uses: actions/upload-artifact@v3
+        with:
+          name: failed-logs
+          path: failed-logs
+          retention-days: 10
+      
       - name: Stop containers
         if: always()
         run: |
           cd servicechain-docker
           docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE down
-          
+      
       - name: Notify slack fail
         if: failure()
         env:
