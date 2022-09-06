@@ -67,7 +67,7 @@ jobs:
         with:
           name: failed-logs
           path: failed-logs
-          retention-days: 10
+          retention-days: 90
       
       - name: Stop containers
         if: always()
