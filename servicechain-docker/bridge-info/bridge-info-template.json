@@ -1,0 +1,24 @@
+{
+    "sender": {
+        "child": {
+            "key": "0x6a98c76bae11151c5d74f9a007fdf689a7ca8aa3a78b1268fddf6d5df5348cf1"
+        },
+        "parent": {
+            "key": "0x1dd4dc19688dde6b519f3d305349fa7cbc6f5c4195e72e0d12b665b2bc39a3a1"
+        }
+    },
+    "url": {
+        "child": "http://127.0.0.1:8351",
+        "parent": "http://127.0.0.1:8451"
+    },
+    "bridges": [
+        {
+            "child" : {
+                "operator": "{CHILD_OPERATOR}"
+            },
+            "parent" : {
+                "operator": "{PARENT_OPERATOR}"
+            }
+        }
+    ]
+}

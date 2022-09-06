@@ -1,0 +1,7 @@
+export bridgeInfo=../config/bridge-info.json
+export parentBuildPath=../build
+export childBuildPath=../build
+export transferConfig=transfer-config.json
+
+echo "parentBuildPath : $parentBuildPath"
+echo "childBuildPath : $childBuildPath"

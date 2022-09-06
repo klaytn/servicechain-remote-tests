@@ -1,0 +1,91 @@
+version: '3.3'
+services:
+  CN-0:
+    hostname: CN-0
+    container_name: CN-0
+    image: ${PARENT_KLAYTN_DOCKER_IMAGE}
+    ports:
+      - '32323'
+      - '8551'
+      - '61001'
+    volumes:
+      - $PWD/cn:/node-conf
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cd /node-conf && sh /node-conf/entrypoint.sh
+    networks:
+      app_net_actions:
+        ipv4_address: 172.16.100.10
+    restart: "no"
+  PN-0:
+    hostname: PN-0
+    image: ${PARENT_KLAYTN_DOCKER_IMAGE}
+    container_name: PN-0
+    ports:
+      - '32323'
+      - '8551'
+      - '61001'
+    volumes:
+      - $PWD/pn:/node-conf
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cd /node-conf && sh /node-conf/entrypoint.sh
+    networks:
+      app_net_actions:
+        ipv4_address: 172.16.100.11
+    restart: "no"
+  EN-0:
+    hostname: EN-0
+    image: ${PARENT_KLAYTN_DOCKER_IMAGE}
+    container_name: EN-0
+    ports:
+      - '32323'
+      - '${PARENT_PUBLISHED_HOST_PORT}:8551'
+      - '61001'
+      - '50505'
+    volumes:
+      - $PWD/en:/node-conf
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cd /node-conf && sh /node-conf/entrypoint.sh
+    networks:
+      app_net_actions:
+        ipv4_address: 172.16.100.12
+    restart: "no"
+  SCN-0:
+    hostname: SCN-0
+    image: ${CHILD_KLAYTN_DOCKER_IMAGE}
+    container_name: SCN-0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - '32323'
+      - '${CHILD_PUBLISHED_HOST_PORT}:8551'
+      - '61001'
+      - '50506'
+      - '7551'
+    volumes:
+      - $PWD/scn:/node-conf
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        cd /node-conf && sh /node-conf/entrypoint.sh
+    networks:
+      app_net_actions:
+        ipv4_address: 172.16.100.13
+    restart: "no"
+
+networks:
+  app_net_actions:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.100.0/24

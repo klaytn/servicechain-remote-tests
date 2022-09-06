@@ -1,0 +1,14 @@
+# Intellij
+.idea
+
+# bridge-info output files
+**/bridge-info*.json
+
+# value transfer outputs
+**/transfer-config*.json
+
+# node
+**/node_modules
+
+# test src
+test/klaytn/src
