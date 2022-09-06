@@ -52,21 +52,21 @@ jobs:
       - name: Test the ERC20 value transfer
         run: cd tests/value-transfer/ERC20 && bash run_testcase.sh
       
-      - name: Copy log files in the failed-logs directory in case of failure
+      - name: Copy log files in the backup-logs directory
         if: always()
         run: |
-          mkdir failed-logs
-          docker logs CN-0 >& failed-logs/kcnd.out
-          docker logs PN-0 >& failed-logs/kpnd.out
-          docker logs EN-0 >& failed-logs/kend.out
-          docker logs SCN-0 >& failed-logs/kscnd.out
+          mkdir backup-logs
+          docker logs CN-0 >& backup-logs/kcnd.out
+          docker logs PN-0 >& backup-logs/kpnd.out
+          docker logs EN-0 >& backup-logs/kend.out
+          docker logs SCN-0 >& backup-logs/kscnd.out
       
-      - name: Upload log files in case of failure
+      - name: Upload log files always
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: failed-logs
-          path: failed-logs
+          name: backup-logs
+          path: backup-logs
           retention-days: 90
       
       - name: Stop containers
