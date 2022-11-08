@@ -1,24 +1,20 @@
 {
-    "sender": {
-        "child": {
-            "key": "0x6a98c76bae11151c5d74f9a007fdf689a7ca8aa3a78b1268fddf6d5df5348cf1"
-        },
-        "parent": {
-            "key": "0x1dd4dc19688dde6b519f3d305349fa7cbc6f5c4195e72e0d12b665b2bc39a3a1"
-        }
+    "contractOwnerKey": {
+        "child": "0x6a98c76bae11151c5d74f9a007fdf689a7ca8aa3a78b1268fddf6d5df5348cf1",
+        "parent": "0x1dd4dc19688dde6b519f3d305349fa7cbc6f5c4195e72e0d12b665b2bc39a3a1"
+    },
+    "senderKey": {
+        "bob": "0xacde2106c99ba64672a7912e904774643d78eb1ca3aa614ef10725b82a72f047",
+        "alice": "0x483bb95b5becd97b05fe280f215795de15eb9b31aaba9fe27625a372e59f556c"
     },
     "url": {
         "child": "http://127.0.0.1:8351",
         "parent": "http://127.0.0.1:8451"
     },
-    "bridges": [
+    "operators": [
         {
-            "child" : {
-                "operator": "{CHILD_OPERATOR}"
-            },
-            "parent" : {
-                "operator": "{PARENT_OPERATOR}"
-            }
+            "child" : "{CHILD_OPERATOR}",
+            "parent" : "{PARENT_OPERATOR}"
         }
     ]
 }
