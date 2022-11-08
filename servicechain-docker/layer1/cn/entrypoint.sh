@@ -4,7 +4,7 @@ set -e # exit on first error
 mkdir -p /klaytn
 
 # genesis.json
-cp ./genesis.json /klaytn/genesis.json
+cp ./../genesis.json /klaytn/genesis.json
 
 # static-nodes.json
 cp ./static-nodes.json /klaytn/static-nodes.json

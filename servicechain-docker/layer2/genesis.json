@@ -2,12 +2,12 @@
   "config": {
     "chainId": 1004,
     "istanbul": {
-      "epoch": 604800,
+      "epoch": 60,
       "policy": 0,
       "sub": 21
     },
-    "unitPrice": 25000000000,
-    "deriveShaImpl": 0,
+    "unitPrice": 0,
+    "deriveShaImpl": 2,
     "governance": {
       "governingNode": "0x7c24f4decc7a59f915d370faf89c63519e99bfcf",
       "governanceMode": "none"

@@ -3,13 +3,14 @@
     "chainId": 1000,
     "istanbulCompatibleBlock": 0,
     "londonCompatibleBlock": 0,
-    "ethTxTypeCompatibleBlock": 0,
+    "ethTxTypeCompatibleBlock": 10,
+    "magmaCompatibleBlock": 10,
     "istanbul": {
-      "epoch": 3600,
+      "epoch": 60,
       "policy": 0,
       "sub": 22
     },
-    "unitPrice": 0,
+    "unitPrice": 25000000000,
     "deriveShaImpl": 2,
     "governance": null
   },

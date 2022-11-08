@@ -9,12 +9,12 @@ services:
       - '8551'
       - '61001'
     volumes:
-      - $PWD/cn:/node-conf
+      - $PWD/layer1:/node-conf
     entrypoint:
       - /bin/bash
       - -c
       - |
-        cd /node-conf && sh /node-conf/entrypoint.sh
+        cd /node-conf/cn && sh ./entrypoint.sh
     networks:
       app_net_actions:
         ipv4_address: 172.16.100.10
@@ -28,12 +28,12 @@ services:
       - '8551'
       - '61001'
     volumes:
-      - $PWD/pn:/node-conf
+      - $PWD/layer1:/node-conf
     entrypoint:
       - /bin/bash
       - -c
       - |
-        cd /node-conf && sh /node-conf/entrypoint.sh
+        cd /node-conf/pn && sh ./entrypoint.sh
     networks:
       app_net_actions:
         ipv4_address: 172.16.100.11
@@ -48,12 +48,12 @@ services:
       - '61001'
       - '50505'
     volumes:
-      - $PWD/en:/node-conf
+      - $PWD/layer1:/node-conf
     entrypoint:
       - /bin/bash
       - -c
       - |
-        cd /node-conf && sh /node-conf/entrypoint.sh
+        cd /node-conf/en && sh ./entrypoint.sh
     networks:
       app_net_actions:
         ipv4_address: 172.16.100.12
@@ -71,12 +71,12 @@ services:
       - '50506'
       - '7551'
     volumes:
-      - $PWD/scn:/node-conf
+      - $PWD/layer2:/node-conf
     entrypoint:
       - /bin/bash
       - -c
       - |
-        cd /node-conf && sh /node-conf/entrypoint.sh
+        cd /node-conf/scn && sh ./entrypoint.sh
     networks:
       app_net_actions:
         ipv4_address: 172.16.100.13
