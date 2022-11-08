@@ -32,5 +32,5 @@ It configures the correct operators in bridge-info.json via the bridge-info-temp
 
 ## Do testing in local
 ```shell
-sh local-test.sh
+sh local-run.sh down-skip
 ```

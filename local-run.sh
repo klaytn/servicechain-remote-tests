@@ -40,24 +40,42 @@ echo ""
 cd servicechain-docker
 sh bridge-info/default-bridge-info.sh
 cd ..
-
-echo ""
-echo "------------------------------------------------------"
-echo "Test the ERC20 value transfer"
-echo "------------------------------------------------------"
-echo ""
-
 cp servicechain-docker/bridge-info/bridge-info.json tests/value-transfer/config
+
+echo ""
+echo "------------------------------------------------------"
+echo "Deploy bridge and token contracts for value transfer"
+echo "------------------------------------------------------"
+echo ""
+
 cd tests/value-transfer
 npm i
-cd ERC20 && bash run_testcase.sh
+cd deploy && bash deploy-contracts.sh
 cd ../../..
 
 echo ""
 echo "------------------------------------------------------"
-echo "Stop containers"
+echo "Test the value transfer for wallet"
 echo "------------------------------------------------------"
 echo ""
-cd servicechain-docker
-docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE down
-cd ..
+
+cd tests/value-transfer
+#npm i
+cd wallet && bash run-value-transfer.sh
+cd ../../..
+
+
+DOWN_SKIP_FLAG=$1
+if [[ "${DOWN_SKIP_FLAG}" == "down-skip" ]]; then
+  echo "Down command is skipped!"
+else
+  echo ""
+  echo "------------------------------------------------------"
+  echo "Stop containers"
+  echo "------------------------------------------------------"
+  echo ""
+  echo "Down command is checked!"
+  cd servicechain-docker
+  docker-compose -f docker-compose-servicechain.yml --env-file $DOCKER_COMPOSE_ENV_FILE down
+  cd ..
+fi

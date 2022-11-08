@@ -49,8 +49,11 @@ jobs:
       - run: cp servicechain-docker/bridge-info/bridge-info.json tests/value-transfer/config
       - run: cd tests/value-transfer && npm i
 
-      - name: Test the ERC20 value transfer
-        run: cd tests/value-transfer/ERC20 && bash run_testcase.sh
+      - name: Deploy bridge and token contracts for value transfer
+        run: cd tests/value-transfer/deploy && bash deploy-contracts.sh
+
+      - name: Test the value transfer for wallet
+        run: cd tests/value-transfer/wallet && bash run-value-transfer.sh
 
       - name: Copy log files in the backup-logs directory
         if: always()
