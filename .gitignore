@@ -12,3 +12,6 @@
 
 # test src
 test/klaytn/src
+
+# yarn
+**/yarn.lock
